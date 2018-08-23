@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Pokédex</string>
+    <string name="launcher_loading_data">Loading data</string>
+    <string name="launcher_retry">Retry</string>
+    <string name="launcher_network_error">"An error has occurred,\nPlease check your connection\nand retry"</string>
+    <string name="hint_query">Pokémon name ex: Pikachu</string>
+</resources>
