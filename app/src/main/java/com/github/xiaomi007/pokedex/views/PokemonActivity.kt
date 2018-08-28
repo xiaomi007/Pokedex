@@ -53,6 +53,10 @@ class PokemonActivity : AppCompatActivity() {
         recycler.adapter = mAdapter
         recycler.layoutManager = mLayoutManager
         recycler.addItemDecoration(mItemDecoration)
+        recycler.setOnTouchListener { _, _ ->
+            searchView.clearFocus()
+            false
+        }
         loadList("")
 
         searchView.setIconifiedByDefault(false)
