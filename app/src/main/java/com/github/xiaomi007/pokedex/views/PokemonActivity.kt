@@ -46,20 +46,21 @@ class PokemonActivity : AppCompatActivity() {
         mPokemonPresenterFactory = PokemonPresenterFactory(PokemonDatabase.getInstance(this).pokemonDao())
         mPokemonActivityPresenter = ViewModelProviders.of(this, mPokemonPresenterFactory).get(PokemonActivityPresenter::class.java)
 
+        recycler.adapter = mAdapter
+        recycler.layoutManager = mLayoutManager
+
+        loadList(searchView.query.toString())
     }
 
     override fun onStart() {
         super.onStart()
-        recycler.adapter = mAdapter
-        recycler.layoutManager = mLayoutManager
+
         recycler.addItemDecoration(mItemDecoration)
         recycler.setOnTouchListener { _, _ ->
             searchView.clearFocus()
             false
         }
-        loadList("")
 
-        searchView.setIconifiedByDefault(false)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -67,6 +68,7 @@ class PokemonActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 val text = newText ?: ""
+                Log.d(TAG, "onQueryTextChange [$text]")
                 loadList(text)
                 return true
             }
@@ -101,10 +103,16 @@ class PokemonActivity : AppCompatActivity() {
 
     override fun onStop() {
         disposables.clear()
-        recycler.adapter = null
-        recycler.layoutManager = null
+
         recycler.removeItemDecoration(mItemDecoration)
         super.onStop()
+    }
+
+    override fun onDestroy() {
+        recycler.adapter = null
+        recycler.layoutManager = null
+
+        super.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
